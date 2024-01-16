@@ -1,7 +1,12 @@
 script_name = 'Stick to Keyframes'
 script_description = 'Offset line start/end time if close to keyframes.'
 script_author = 'chiyoi'
-script_version = '0.1'
+script_version = '0.0'
+
+local start_forward_threshold = 80
+local start_backward_threshold = 80
+local end_forward_threshold = 80
+local end_backward_threshold = 200
 
 aegisub.register_macro(
     script_name,
@@ -18,13 +23,16 @@ aegisub.register_macro(
         for _, i in ipairs(selected_lines) do
             local line = subtitles[i]
             local keyframe_timestamp = Closest(keyframes, line.start_time)
-            if math.abs(keyframe_timestamp - line.start_time) < 80 then
+            if
+                line.start_time < keyframe_timestamp and keyframe_timestamp - line.start_time < start_forward_threshold or
+                keyframe_timestamp < line.start_time and line.start_time - keyframe_timestamp < start_backward_threshold
+            then
                 line.start_time = keyframe_timestamp
             end
             keyframe_timestamp = Closest(keyframes, line.end_time)
             if
-                line.end_time < keyframe_timestamp and keyframe_timestamp - line.end_time < 80 or
-                keyframe_timestamp < line.end_time and line.end_time - keyframe_timestamp < 200
+                line.end_time < keyframe_timestamp and keyframe_timestamp - line.end_time < end_forward_threshold or
+                keyframe_timestamp < line.end_time and line.end_time - keyframe_timestamp < end_backward_threshold
             then
                 line.end_time = keyframe_timestamp
             end

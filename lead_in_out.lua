@@ -1,7 +1,7 @@
 script_name = 'Lead In Out'
 script_description = 'Add lead in/out time to each line.'
 script_author = 'chiyoi'
-script_version = '0.1'
+script_version = '0.0'
 
 local lead_in_time = 150
 local lead_out_time = 120

@@ -1,7 +1,7 @@
 script_name = 'Copy Time'
-script_description = 'Copy time to lines after.'
+script_description = 'Copy start and end time to #selected_lines + 1 after.'
 script_author = 'chiyoi'
-script_version = '0.1'
+script_version = '0.0'
 
 aegisub.register_macro(
     script_name,
