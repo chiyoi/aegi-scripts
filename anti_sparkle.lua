@@ -3,7 +3,7 @@ script_description = 'Extend lines with end time close to the next line to avoid
 script_author = 'chiyoi'
 script_version = '0.0'
 
-local threshold = 150
+local threshold = 170
 
 aegisub.register_macro(
     script_name,
