@@ -10,11 +10,11 @@ aegisub.register_macro(
     script_name,
     script_description,
     function(subtitles, selected_lines, active_line)
-        for _, i in ipairs(selected_lines) do
-            local line = subtitles[i]
+        for _, line_index in ipairs(selected_lines) do
+            local line = subtitles[line_index]
             line.start_time = line.start_time - lead_in_time
             line.end_time = line.end_time + lead_out_time
-            subtitles[i] = line
+            subtitles[line_index] = line
         end
     end
 )

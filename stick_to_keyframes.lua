@@ -20,27 +20,32 @@ aegisub.register_macro(
             local num = tonumber(line)
             if num then table.insert(keyframes, num) end
         end
-        for _, i in ipairs(selected_lines) do
-            local line = subtitles[i]
-            local keyframe_timestamp = Closest(keyframes, line.start_time)
+        for _, line_index in ipairs(selected_lines) do
+            local line = subtitles[line_index]
+            local keyframe_timestamp = RoundToTens(Closest(keyframes, line.start_time))
             if
                 line.start_time < keyframe_timestamp and keyframe_timestamp - line.start_time < start_forward_threshold or
                 keyframe_timestamp < line.start_time and line.start_time - keyframe_timestamp < start_backward_threshold
             then
                 line.start_time = keyframe_timestamp
             end
-            keyframe_timestamp = Closest(keyframes, line.end_time)
+            keyframe_timestamp = RoundToTens(Closest(keyframes, line.end_time))
             if
                 line.end_time < keyframe_timestamp and keyframe_timestamp - line.end_time < end_forward_threshold or
                 keyframe_timestamp < line.end_time and line.end_time - keyframe_timestamp < end_backward_threshold
             then
                 line.end_time = keyframe_timestamp
             end
-            subtitles[i] = line
+            subtitles[line_index] = line
         end
         file:close()
     end
 )
+
+-- Generated with GPT-4.
+function RoundToTens(num)
+    return math.floor(num / 10 + 0.5) * 10
+end
 
 -- Generated with GPT-4, modified.
 function Closest(array, target)
