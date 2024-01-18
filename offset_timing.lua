@@ -1,25 +1,43 @@
-script_name = 'Stick to Keyframes'
-script_description = 'Offset line start/end time if close to keyframes.'
+script_name = 'Offset Timing'
+script_description =
+'Extend lines with end time close to the next line to avoid sparkle, resolve overlaps, and stick to keyframes.'
 script_author = 'chiyoi'
 script_version = '0.0'
 
-local start_forward_threshold = 80
+local minimum_interval = 170
+
+local start_forward_threshold = 150
 local start_backward_threshold = 80
-local end_forward_threshold = 80
+local end_forward_threshold = 150
 local end_backward_threshold = 200
 
 aegisub.register_macro(
     script_name,
     script_description,
     function(subtitles, selected_lines, active_line)
-        local filename = os.getenv('HOME') .. '/Downloads/keyframes.txt'
-        local file = io.open(filename, 'r')
-        if file == nil then error('Could not open file: ' .. filename) end
-        local keyframes = {}
-        for line in file:lines() do
-            local num = tonumber(line)
-            if num then table.insert(keyframes, num) end
+        -- Avoid sparkle and resolve overlaps.
+        local process = function(lines)
+            for i, line_index in ipairs(lines) do
+                if i + 1 > #lines then return end
+                local this_line = subtitles[line_index]
+                local next_line = subtitles[lines[i + 1]]
+                if
+                    next_line.start_time < this_line.end_time or
+                    next_line.start_time - this_line.end_time < minimum_interval
+                then
+                    this_line.end_time = next_line.start_time
+                end
+                subtitles[line_index] = this_line
+            end
         end
+        local tops, subs = SplitListByCondition(selected_lines, function(line_index)
+            return string.sub(subtitles[line_index].style, 1, 3) == "Top"
+        end)
+        process(tops)
+        process(subs)
+
+        -- Stick to keyframes.
+        local keyframes = Keyframes()
         for _, line_index in ipairs(selected_lines) do
             local line = subtitles[line_index]
             local keyframe_timestamp = RoundToTens(Closest(keyframes, line.start_time))
@@ -38,9 +56,21 @@ aegisub.register_macro(
             end
             subtitles[line_index] = line
         end
-        file:close()
     end
 )
+
+function Keyframes()
+    local filename = os.getenv('HOME') .. '/Downloads/keyframes.txt'
+    local file = io.open(filename, 'r')
+    if file == nil then error('Could not open file: ' .. filename) end
+    local keyframes = {}
+    for line in file:lines() do
+        local num = tonumber(line)
+        if num then table.insert(keyframes, num) end
+    end
+    file:close()
+    return keyframes
+end
 
 -- Generated with GPT-4.
 function RoundToTens(num)
@@ -75,4 +105,20 @@ function Closest(array, target)
     end
 
     return array[closest]
+end
+
+-- Generated with GPT-4.
+function SplitListByCondition(list, conditionFunc)
+    local list1 = {}
+    local list2 = {}
+
+    for _, item in ipairs(list) do
+        if conditionFunc(item) then
+            table.insert(list1, item)
+        else
+            table.insert(list2, item)
+        end
+    end
+
+    return list1, list2
 end
