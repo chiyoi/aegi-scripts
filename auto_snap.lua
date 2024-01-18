@@ -1,6 +1,5 @@
-script_name = 'Offset Timing'
-script_description =
-'Extend lines with end time close to the next line to avoid sparkle, resolve overlaps, and stick to keyframes.'
+script_name = 'Auto Snap'
+script_description = 'Auto snap lines to avoid sparkle and stick to keyframes.'
 script_author = 'chiyoi'
 script_version = '0.0'
 
