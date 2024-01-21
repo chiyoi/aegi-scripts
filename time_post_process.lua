@@ -1,20 +1,20 @@
-script_name = 'Auto Snap'
-script_description = 'Auto snap lines to avoid sparkle and stick to keyframes.'
+script_name = 'Time Post-Process'
+script_description = 'I love repeatedly building wheels.'
 script_author = 'chiyoi'
 script_version = '0.0'
 
-local minimum_interval = 170
+local max_gap = 170
 
-local start_forward_threshold = 150
-local start_backward_threshold = 80
-local end_forward_threshold = 150
-local end_backward_threshold = 200
+local starts_before_threshold = 150
+local start_after_threshold = 80
+local ends_before_threshold = 150
+local ends_after_threshold = 200
 
 aegisub.register_macro(
     script_name,
     script_description,
     function(subtitles, selected_lines, active_line)
-        -- Avoid sparkle and resolve overlaps.
+        -- Make adjacent subtitles continuous.
         local process = function(lines)
             for i, line_index in ipairs(lines) do
                 if i + 1 > #lines then return end
@@ -22,7 +22,7 @@ aegisub.register_macro(
                 local next_line = subtitles[lines[i + 1]]
                 if
                     next_line.start_time < this_line.end_time or
-                    next_line.start_time - this_line.end_time < minimum_interval
+                    next_line.start_time - this_line.end_time < max_gap
                 then
                     this_line.end_time = next_line.start_time
                 end
@@ -35,21 +35,21 @@ aegisub.register_macro(
         process(tops)
         process(subs)
 
-        -- Stick to keyframes.
+        -- Keyframe snapping.
         local keyframes = Keyframes()
         for _, line_index in ipairs(selected_lines) do
             local line = subtitles[line_index]
             local keyframe_timestamp = RoundToTens(Closest(keyframes, line.start_time))
             if
-                line.start_time < keyframe_timestamp and keyframe_timestamp - line.start_time < start_forward_threshold or
-                keyframe_timestamp < line.start_time and line.start_time - keyframe_timestamp < start_backward_threshold
+                line.start_time < keyframe_timestamp and keyframe_timestamp - line.start_time < starts_before_threshold or
+                keyframe_timestamp < line.start_time and line.start_time - keyframe_timestamp < start_after_threshold
             then
                 line.start_time = keyframe_timestamp
             end
             keyframe_timestamp = RoundToTens(Closest(keyframes, line.end_time))
             if
-                line.end_time < keyframe_timestamp and keyframe_timestamp - line.end_time < end_forward_threshold or
-                keyframe_timestamp < line.end_time and line.end_time - keyframe_timestamp < end_backward_threshold
+                line.end_time < keyframe_timestamp and keyframe_timestamp - line.end_time < ends_before_threshold or
+                keyframe_timestamp < line.end_time and line.end_time - keyframe_timestamp < ends_after_threshold
             then
                 line.end_time = keyframe_timestamp
             end

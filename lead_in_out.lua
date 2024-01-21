@@ -1,5 +1,5 @@
 script_name = 'Lead In Out'
-script_description = 'Add lead in/out time to each line.'
+script_description = 'Add lead in/out time to each line (Warning: Not idempotent).'
 script_author = 'chiyoi'
 script_version = '0.0'
 
