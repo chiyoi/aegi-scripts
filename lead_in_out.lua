@@ -4,7 +4,7 @@ script_author = 'chiyoi'
 script_version = '0.0'
 
 local lead_in_time = 150
-local lead_out_time = 120
+local lead_out_time = 150
 
 aegisub.register_macro(
     script_name,

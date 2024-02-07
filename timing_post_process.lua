@@ -1,14 +1,14 @@
-script_name = 'Time Post-Process'
+script_name = 'Timing Post-Process'
 script_description = 'I love repeatedly building wheels.'
 script_author = 'chiyoi'
 script_version = '0.0'
 
 local max_gap = 170
 
-local starts_before_threshold = 150
-local start_after_threshold = 80
+local starts_before_threshold = 200
+local starts_after_threshold = 100
 local ends_before_threshold = 150
-local ends_after_threshold = 200
+local ends_after_threshold = 250
 
 aegisub.register_macro(
     script_name,
@@ -42,7 +42,7 @@ aegisub.register_macro(
             local keyframe_timestamp = RoundToTens(Closest(keyframes, line.start_time))
             if
                 line.start_time < keyframe_timestamp and keyframe_timestamp - line.start_time < starts_before_threshold or
-                keyframe_timestamp < line.start_time and line.start_time - keyframe_timestamp < start_after_threshold
+                keyframe_timestamp < line.start_time and line.start_time - keyframe_timestamp < starts_after_threshold
             then
                 line.start_time = keyframe_timestamp
             end
