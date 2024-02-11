@@ -1,5 +1,5 @@
 script_name = 'Timing Post-Process'
-script_description = 'I love repeatedly building wheels.'
+script_description = 'I love reinventing wheels.'
 script_author = 'chiyoi'
 script_version = '0.0'
 
