@@ -3,11 +3,11 @@ script_description = 'I love reinventing wheels.'
 script_author = 'chiyoi'
 script_version = '0.0'
 
-local max_gap = 170
+local max_gap = 180
 
 local starts_before_threshold = 200
 local starts_after_threshold = 100
-local ends_before_threshold = 150
+local ends_before_threshold = 180
 local ends_after_threshold = 250
 
 aegisub.register_macro(
