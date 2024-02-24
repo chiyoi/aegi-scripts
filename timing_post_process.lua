@@ -71,12 +71,12 @@ function Keyframes()
     return keyframes
 end
 
--- Generated with GPT-4.
+-- Generated with GPT.
 function RoundToTens(num)
     return math.floor(num / 10 + 0.5) * 10
 end
 
--- Generated with GPT-4, modified.
+-- Generated with GPT, modified.
 function Closest(array, target)
     if #array == 0 then error('Empty array.') end -- Handle empty array
     if #array == 1 then return array[1] end       -- Handle single element array
@@ -106,7 +106,7 @@ function Closest(array, target)
     return array[closest]
 end
 
--- Generated with GPT-4.
+-- Generated with GPT.
 function SplitListByCondition(list, conditionFunc)
     local list1 = {}
     local list2 = {}
