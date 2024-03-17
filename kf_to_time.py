@@ -1,7 +1,5 @@
-import os
 import sys
 from moviepy.editor import VideoFileClip
-import numpy as np
 
 import progress
 
